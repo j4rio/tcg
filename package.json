@@ -1,22 +1,21 @@
 {
-  "name": "kiccs-sfs-sync-manager",
+  "name": "tcg",
   "version": "0.0.1",
-  "description": "kiccs-sfs-sync-manager",
-  "main": "index.js",
+  "description": "tcg",
+  "main": "app.js",
   "scripts": {
     "prestart": "npm install",
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "engines" : {
     "node": "7.x"
   },
   "keywords": [
-    "swagger"
+    "tcg","code generation"
   ],
-  "license": "Unlicense",
+  "license": "MIT",
   "private": true,
   "dependencies": {
-    "kiccs-common-node-modules": "git+https://kiccsteam:-ZAEBXyDHrXes-y6TxA7@git.ng.bluemix.net/kiccsteam/kiccs-common-node-modules#dc922dfced845e6d34b23010ecf7c0057d998949",
     "express": "4.15.3"
   },
   "devDependencies": {
