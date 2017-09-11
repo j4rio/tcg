@@ -1,0 +1,35 @@
+{
+  "name": "kiccs-sfs-sync-manager",
+  "version": "0.0.1",
+  "description": "kiccs-sfs-sync-manager",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "engines" : {
+    "node": "7.x"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "kiccs-common-node-modules": "git+https://kiccsteam:-ZAEBXyDHrXes-y6TxA7@git.ng.bluemix.net/kiccsteam/kiccs-common-node-modules#dc922dfced845e6d34b23010ecf7c0057d998949",
+    "express": "4.15.3"
+  },
+  "devDependencies": {
+    "grunt": "1.0.1",
+    "grunt-contrib-clean": "1.0.0",
+    "grunt-contrib-jshint": "1.1.0",
+    "grunt-env": "0.4.4",
+    "grunt-istanbul": "0.7.2",
+    "grunt-jsdoc": "2.1.0",
+    "grunt-mocha-test": "0.13.2",
+    "grunt-todo": "0.5.0",
+    "jshint-junit-reporter": "0.2.2",
+    "mocha": "3.2.0",
+    "chai": "3.5.0"
+  }
+}
