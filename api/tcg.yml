@@ -1,0 +1,80 @@
+swagger: "2.0"
+info:
+  description: "TCG server."
+  version: "0.0.1"
+  title: "TCG"
+  termsOfService: "https://github.com/j4rio/tcg"
+  contact:
+    email: "jari.ojala@varjonvalo.fi"
+  license:
+    name: "MIT"
+    url: "https://github.com/j4rio/tcg/blob/master/LICENSE"
+host: "localhost"
+basePath: "/tcg/v1"
+tags:
+- name: "tcg"
+  description: "Your access point to TCG"
+  externalDocs:
+    description: "TCG in github.com"
+    url: "https://github.com/j4rio/tcg"
+schemes:
+- "http"
+paths:
+  /{state}/{domain}/{sef}:
+    get:
+      tags:
+      - "tcg"
+      summary: "Request a code fragment from TCG"
+      description: "Request a code fragment from TCG"
+      operationId: "getFragment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "state"
+        in: "path"
+        description: "state"
+        required: true
+        type: string
+      - name: "domain"
+        in: "path"
+        description: "domain for the code fragment"
+        required: true
+        type: "string"
+      - name: "sef"
+        in: "path"
+        description: "the side-effect"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "success"
+          schema:
+            $ref: "#/definitions/SEF"
+        404:
+          description: "unknown state/domain/sef"
+        405:
+          description: "Invalid input"
+
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  SEF:
+    type: "object"
+    properties:
+      why:
+        type: "string"
+        description: "Why the following code fragment"
+      fragment:
+        type: "string"
+        description: "The code"
+      nextState:
+        type: "string"
+        description: "The next state"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
