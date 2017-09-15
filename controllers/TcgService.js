@@ -1,6 +1,6 @@
 'use strict';
 
-exports.getDomainSEF = function(args, res, next) {
+module.exports.getFragment = function(args, res, next) {
   /**
    * Request a code fragment from TCG
    * Request a code fragment from TCG
@@ -12,7 +12,8 @@ exports.getDomainSEF = function(args, res, next) {
    **/
   var examples = {};
   examples['application/json'] = {
-  "why" : "aeiou",
+  "explain" : "aeiou",
+  "fragment": "asdas",
   "nextState" : "aeiou"
 };
   if (Object.keys(examples).length > 0) {
@@ -22,4 +23,3 @@ exports.getDomainSEF = function(args, res, next) {
     res.end();
   }
 }
-

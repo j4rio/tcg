@@ -4,6 +4,6 @@ var url = require('url');
 
 var Tcg = require('./TcgService');
 
-module.exports.getDomainSEF = function getDomainSEF (req, res, next) {
-  Tcg.getDomainSEF(req.swagger.params, res, next);
+module.exports.getFragment = function getFragment (req, res, next) {
+  Tcg.getFragment(req.swagger.params, res, next);
 };
