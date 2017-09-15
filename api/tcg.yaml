@@ -9,7 +9,7 @@ info:
   license:
     name: "MIT"
     url: "https://github.com/j4rio/tcg/blob/master/LICENSE"
-host: "localhost"
+host: "localhost:8080"
 basePath: "/tcg/v1"
 tags:
 - name: "tcg"
