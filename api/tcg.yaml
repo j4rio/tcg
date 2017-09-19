@@ -20,61 +20,80 @@ tags:
 schemes:
 - "http"
 paths:
-  /{state}/{domain}/{sef}:
+  /{domain}/{state}:
     get:
       tags:
       - "tcg"
-      summary: "Get a code fragment that emits a given sef"
-      description: "Get a code fragment that emits a given sef"
-      operationId: "getFragment"
+      summary: "Get an array of SEFs for a state in a domain"
+      description: "Get an array of SEFs for a state in a domain"
+      operationId: "getSEFArray"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
+      - name: "domain"
+        in: "path"
+        description: "context domain"
+        required: true
+        type: "string"
       - name: "state"
         in: "path"
         description: "state"
-        required: true
-        type: "string"
-      - name: "domain"
-        in: "path"
-        description: "domain for the code fragment"
-        required: true
-        type: "string"
-      - name: "sef"
-        in: "path"
-        description: "the side-effect"
         required: true
         type: "string"
       responses:
         200:
           description: "success"
           schema:
-            $ref: "#/definitions/SEF"
+            $ref: "#/definitions/SEFArray"
         404:
-          description: "unknown state/domain/sef"
+          description: "unknown domain/state/sef"
         405:
           description: "Invalid input"
-      x-swagger-router-controller: "Tcg"
+      x-swagger-router-controller: "tcg"
 securityDefinitions:
   api_key:
     type: "apiKey"
     name: "api_key"
     in: "header"
 definitions:
+  Quaternion:
+    description: "sef orientation matrix"
+    type: "array"
+    default: 
+      [ 1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+      ]
+    items: 
+      type: "number"
   SEF:
     type: "object"
     properties:
+      initialState:
+        type: "string"
+        description: "initial state"
+      triggers:
+        type: array
+        items: 
+          type: "string"
       explain:
         type: "string"
         description: "explenation about the code fragment"
       fragment:
         type: "string"
         description: "code fragment"
+      quaternion:
+        $ref: "#/definitions/Quaternion"
       nextState:
         type: "string"
         description: "the next state"
+  SEFArray:
+    type: "array"
+    items:
+      $ref: "#/definitions/SEF"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

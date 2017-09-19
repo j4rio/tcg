@@ -1,6 +1,8 @@
-'use strict';
+"use strict";
 
-module.exports.getFragment = function(args, res, next) {
+//get sef array
+
+function getSEFArray(args, res, next) {
   /**
    * Request a code fragment from TCG
    * Request a code fragment from TCG
@@ -12,9 +14,12 @@ module.exports.getFragment = function(args, res, next) {
    **/
   var examples = {};
   examples['application/json'] = {
-  "explain" : "aeiou",
-  "fragment": "asdas",
-  "nextState" : "aeiou"
+  "initialState": "something first",
+  "triggers": [ "s1","s2","s3","s4"],
+  "explain" : "one possible explanation",
+  "quaternion": [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1],
+  "fragment": "console.log(\"hello, world!\");",
+  "nextState" : "something next"
 };
   if (Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');
@@ -23,3 +28,9 @@ module.exports.getFragment = function(args, res, next) {
     res.end();
   }
 }
+
+//exported functions
+
+module.exports = {
+  getSEFArray: getSEFArray
+};
