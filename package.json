@@ -21,7 +21,8 @@
   "dependencies": {
     "express": "4.15.3",
     "js-yaml": "^3.3.0",
-    "swagger-tools": "0.10.1"
+    "swagger-tools": "0.10.1",
+    "neo4j-driver": "1.4.0"
   },
   "devDependencies": {
     "grunt": "1.0.1",
