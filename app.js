@@ -13,7 +13,7 @@ var options = { //swaggerRouter configuration
   swaggerUi: path.join(__dirname, "/swagger.json"),
   controllers: path.join(__dirname, "./controllers"),
   useStubs: process.env.NODE_ENV === "development" // Conditionally turn on stubs (mock mode)
-};
+}
 
 //swagger spec
 var spec = fs.readFileSync(path.join(__dirname,"api/tcg.yaml"), "utf8");

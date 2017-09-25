@@ -8,17 +8,25 @@ const driver = neo4j.driver(
   neo4j.auth.basic(process.env.NEO4J_USERNAME,process.env.NEO4J_PASSWORD)
 );
 
-// create node
-function query(query,callback) {
+//open session
+function openSession() {
   const session = driver.session();
-  const resultPromise = session.run(query);
-  resultPromise.then(result => {
-    session.close();
-    callback(null,result);
-  });
+  return session;
+}
+
+//close session
+function closeSession(session) {
+  session.close();
+}
+
+// create node
+function query(session,query) {
+  return session.run(query);
 }
 
 // public functions
 module.exports = {
-  query: query
+  query: query,
+  openSession: openSession,
+  closeSession: closeSession
 };

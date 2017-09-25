@@ -10,18 +10,23 @@ var assert = chai.assert;
 
 describe("tcg", function() {
   var graph_under_test;
+  var session;
 
   //before
-  
+
   before(function(done) {
     graph_under_test = require("../graphDAO.js");
     assert(graph_under_test !== null);
+    session = graph_under_test.openSession();
+    assert(session !== null);
     done();
   });
-  
+
   //after
-  
+
   after(function(done) {
+    assert(session !== null);
+    graph_under_test.closeSession(session);
     done();
   });
 
@@ -43,10 +48,10 @@ describe("tcg", function() {
 
     it( "should make a graph query", function(done) {
       assert(graph_under_test.query !== null);
-      graph_under_test.query("MATCH (n:SEF) RETURN n LIMIT 24",function(err,result) {
-        assert(err === null);
-        assert(result != null);
-        console.log("result: " + JSON.stringify(result))
+
+      graph_under_test.query(session,"MATCH (n:SEF) RETURN n LIMIT 24").then((result) => {
+        assert(result !== null);
+        console.log("result: " + JSON.stringify(result));
         done();
       });
     });

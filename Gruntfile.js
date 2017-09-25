@@ -39,7 +39,8 @@ module.exports = function(grunt) {
         usePackage: true
       },
       src: [
-        "./*.js"
+        "./*.js",
+        "./test/**/*.js"
       ]
     },
     clean: {
@@ -59,8 +60,9 @@ module.exports = function(grunt) {
     instrument: {
       files: [
         "app.js",
-        "test/*.js"
+        "test/**/*.js"
       ],
+      excludes: ["api/tcg.yaml"],
       options: {
         lazy: false,
         basePath: "test/coverage/instrument/"
