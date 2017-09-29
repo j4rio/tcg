@@ -49,7 +49,8 @@ describe("tcg", function() {
     it( "should make a graph query", function(done) {
       assert(graph_under_test.query !== null);
 
-      graph_under_test.query(session,"MATCH (n:SEF) RETURN n LIMIT 24").then((result) => {
+      var now = new Date();
+      graph_under_test.query(session,"MERGE (n:SEF {name: 'grunt', time: '" + now + "'}) RETURN n").then((result) => {
         assert(result !== null);
         console.log("result: " + JSON.stringify(result));
         done();

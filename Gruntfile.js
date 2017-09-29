@@ -6,6 +6,9 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+    tcg: {
+      copyYAML: { file: "api/tcg.yaml"}
+    },
     env: {
       test: {
       },
@@ -62,7 +65,6 @@ module.exports = function(grunt) {
         "app.js",
         "test/**/*.js"
       ],
-      excludes: ["api/tcg.yaml"],
       options: {
         lazy: false,
         basePath: "test/coverage/instrument/"
@@ -125,12 +127,17 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-istanbul");
   grunt.loadNpmTasks("grunt-env");
 
+  //tcg custom tasks
+  grunt.registerMultiTask('tcg', 'tcg test helper grunt task.', function() {
+    grunt.log.writeln("tcg: " + this.target + ': ' + this.data);
+  });
+
   // Default task(s).
   grunt.registerTask("default", ["jshint", "todo", "test"]);
   grunt.registerTask("build", ["clean:output", "jshint", "jsdoc"]);
 
   // Run tests
   grunt.registerTask("test", ["env:test", "clean:coverage", "mochaTest"]);
-  grunt.registerTask("coverage", ["env:coverage", "clean:coverage", "instrument", "mochaTest", "storeCoverage", "makeReport"]);
+  grunt.registerTask("coverage", ["tcg:copyYAML", "env:coverage", "clean:coverage", "instrument", "mochaTest", "storeCoverage", "makeReport"]);
 
 };
