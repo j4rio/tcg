@@ -7,14 +7,17 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     tcg: {
-      copyYAML: { file: "api/tcg.yaml"}
+      test: "test"
     },
     env: {
       test: {
+        API_SWAGGER_FILE: "./api/tcg.yaml",
+        PORT: 8080
       },
       coverage: {
-        // schema used in tests
-        APP_DIR_FOR_CODE_COVERAGE: "./test/coverage/instrument/"
+        API_SWAGGER_FILE: "./api/tcg.yaml",
+        APP_DIR_FOR_CODE_COVERAGE: "./test/coverage/instrument/",
+        PORT: 0
       }
     },
     todo: {
@@ -63,6 +66,9 @@ module.exports = function(grunt) {
     instrument: {
       files: [
         "app.js",
+        "api.js",
+        "graphDAO.js",
+        "controllers/tcg.js",
         "test/**/*.js"
       ],
       options: {
@@ -138,6 +144,6 @@ module.exports = function(grunt) {
 
   // Run tests
   grunt.registerTask("test", ["env:test", "clean:coverage", "mochaTest"]);
-  grunt.registerTask("coverage", ["tcg:copyYAML", "env:coverage", "clean:coverage", "instrument", "mochaTest", "storeCoverage", "makeReport"]);
+  grunt.registerTask("coverage", ["tcg:test", "env:coverage", "clean:coverage", "instrument", "mochaTest", "storeCoverage", "makeReport"]);
 
 };

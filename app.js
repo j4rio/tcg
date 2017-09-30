@@ -16,7 +16,7 @@ var options = { //swaggerRouter configuration
 }
 
 //swagger spec
-var spec = fs.readFileSync(path.join(__dirname,"api/tcg.yaml"), "utf8");
+var spec = fs.readFileSync(process.env.API_SWAGGER_FILE, "utf8");
 var swaggerDoc = jsyaml.safeLoad(spec);
 
 //initialize
@@ -38,9 +38,11 @@ function initialize() {
 
     //the server
     var port = process.env.PORT || 8080;
-    app.listen(port, function() {
-      console.log("server listening on port: " + port);
-    });
+    if(port != 0) {
+      app.listen(port, function() {
+        console.log("server listening on port: " + port);
+      });
+    }
   });
 }
 
