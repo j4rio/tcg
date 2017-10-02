@@ -19,14 +19,22 @@ function closeSession(session) {
   session.close();
 }
 
-// create node
-function query(session,query) {
-  return session.run(query);
+//query
+function query(session,query,queryParam) {
+  return session.run(query,queryParam);
+}
+
+//add node
+function addNode(session,label,name,properties) {
+  var props = JSON.stringify(properties);
+  var queryString = "CREATE (n: " + label + " { name: '" + name + "', properties: '" + props + "'}) return n";
+  return query(session,queryString);
 }
 
 // public functions
 module.exports = {
   query: query,
+  addNode: addNode,
   openSession: openSession,
   closeSession: closeSession
 };

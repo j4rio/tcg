@@ -57,6 +57,16 @@ describe("tcg", function() {
       });
     });
 
+    it( "should be able to add a new node into a graph", function(done) {
+      assert(graph_under_test.addNode !== null);
+
+      graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then((result) => {
+        assert(result !== null);
+        console.log("result: " + JSON.stringify(result));
+        done();
+      })
+    });
+
     it( "should work with a test that always succeed", function(done) {
       assert(true);
       done();
