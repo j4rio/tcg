@@ -31,10 +31,37 @@ function addNode(session,label,name,properties) {
   return query(session,queryString);
 }
 
+//find node
+function findNode(session,label,name) {
+  var queryString = "MATCH (n: " + label + ") WHERE n.name = '" + name + "' RETURN n";
+  return query(session,queryString);
+}
+
+//remove node
+function removeNode(session,label,name) {
+  var queryString = "MATCH (n: " + label + ") WHERE n.name = '" + name + "' DETACH DELETE n";
+  return query(session,queryString);
+}
+
+//result
+function filterResult(result,pos,field) {
+  var ret = null;
+  if(result && "records" in result) {
+    var record = result.records[pos];
+    if(record && "_fields" in record && field in record._fields) {
+      ret = record._fields[field];
+    }
+  }
+  return ret;
+}
+
 // public functions
 module.exports = {
   query: query,
   addNode: addNode,
+  findNode: findNode,
+  removeNode: removeNode,
   openSession: openSession,
-  closeSession: closeSession
+  closeSession: closeSession,
+  filterResult: filterResult
 };

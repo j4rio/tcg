@@ -46,25 +46,27 @@ describe("tcg", function() {
 
     // basic
 
-    it( "should make a graph query", function(done) {
+    it( "should be possible to make a simple graph query", function(done) {
       assert(graph_under_test.query !== null);
-
       var now = new Date();
-      graph_under_test.query(session,"MERGE (n:SEF {name: 'grunt', time: '" + now + "'}) RETURN n").then((result) => {
+      graph_under_test.query(session,"MERGE (n:SEF {name: 'grunt', time: '" + now + "'}) RETURN n").then(result => {
         assert(result !== null);
         console.log("result: " + JSON.stringify(result));
         done();
       });
     });
 
-    it( "should be able to add a new node into a graph", function(done) {
+    it( "should be able to add, find and delete a given named node", function(done) {
       assert(graph_under_test.addNode !== null);
-
-      graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then((result) => {
-        assert(result !== null);
-        console.log("result: " + JSON.stringify(result));
-        done();
-      })
+      graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        graph_under_test.findNode(session,"TestLabel","testName").then(result => {
+          assert(result !== null);
+          var filteredResult = graph_under_test.filterResult(result,0,0);
+          assert(filteredResult.properties.name == "testName");
+          console.log("result: " + JSON.stringify(result.records[0]._fields[0]));
+          done();
+        })
+      });
     });
 
     it( "should work with a test that always succeed", function(done) {
