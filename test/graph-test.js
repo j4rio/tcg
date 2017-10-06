@@ -84,7 +84,7 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to try to index too far over results", function(done) {
+    it( "should be able to filter results too far", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {

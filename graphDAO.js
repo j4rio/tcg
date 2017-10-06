@@ -45,7 +45,6 @@ function removeNode(session,label,name) {
 
 //result
 function filterResult(result,pos,field) {
-  console.log("99999999: " + JSON.stringify(result,null,"\t"));
   var ret = null;
   if(result && "records" in result && pos in result.records) {
     var record = result.records[pos];
