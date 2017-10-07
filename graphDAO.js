@@ -26,9 +26,20 @@ function query(session,query,queryParam) {
 
 //add node
 function addNode(session,label,name,properties) {
-  var props = JSON.stringify(properties);
-  var queryString = "CREATE (n: " + label + " { name: '" + name + "', properties: '" + props + "'}) return n";
-  return query(session,queryString);
+  return findNode(session,label,name).then(result => {
+    var filteredResult = filterResult(result,0,0);
+    // already added?
+    if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name) {
+      return Promise.reject("error, node already exists");
+    }
+    else {
+      var props = JSON.stringify(properties);
+      var queryString = "CREATE (n: " + label + " { name: '" + name + "', properties: '" + props + "'}) return n";
+      return query(session,queryString);
+    }
+  }).catch(error => {
+    return Promise.reject(error);
+  });
 }
 
 //find node

@@ -70,6 +70,20 @@ describe("tcg", function() {
             done();
           });
         })
+      }).catch(error => {
+        console.log("Poks: " + error);
+      });
+    });
+
+    it( "should be able to add a connection between two given existing nodes", function(done) {
+      this.timeout(20000);
+      assert(graph_under_test.addNode !== null);
+      graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        assert(result !== null);
+        graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
+          assert(result != null);
+          done();
+        });
       });
     });
 
