@@ -46,7 +46,7 @@ describe("tcg", function() {
 
     // basic
 
-    it( "should be possible to make a simple graph query", function(done) {
+    it.skip( "should be possible to make a simple graph query", function(done) {
       assert(graph_under_test.query !== null);
       var now = new Date();
       graph_under_test.query(session,"MATCH (n) RETURN n LIMIT 2").then(result => {
@@ -56,7 +56,7 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to add, find and delete a given named node", function(done) {
+    it.skip( "should be able to add, find and delete a given named node", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
@@ -75,19 +75,54 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to add a connection between two given existing nodes", function(done) {
+    it.skip( "should not be able to add a node twice", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
-      graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
-        assert(result !== null);
-        graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
-          assert(result != null);
-          done();
-        });
+      graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        graph_under_test.addNode(session,"TestLabel","testName").catch(err => {
+          assert(err !== null);
+          graph_under_test.removeNode(session,"TestLabel","testName").then(result => {
+            assert(result !== null);
+            console.log("result: " + JSON.stringify(result));
+            done();
+          });
+        })
+      }).catch(error => {
+        console.log("Poks: " + error);
       });
     });
 
-    it( "should be possible to try to find something that is not found", function(done) {
+    it( "should be able to add a relationship between two given existing nodes", function(done) {
+      this.timeout(20000);
+      assert(graph_under_test.addNode !== null);
+      console.log("0000");
+      graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        console.log("0001");
+        assert(result !== null);
+        graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
+          console.log("0002");
+          assert(result != null);
+          //addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties
+          graph_under_test.addRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ props: "yee"}).then(result => {
+            console.log("0003");
+            assert(result != null);
+            graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
+              console.log("0004");
+              assert(result !== null);
+              graph_under_test.removeNode(session,"TestLabelz","testName2").then(result => {
+                console.log("0005");
+                console.log("result: " + JSON.stringify(result));
+                done();
+              });
+            })
+          });
+        });
+      }).catch(error => {
+        done(error);
+      });
+    });
+
+    it.skip( "should be possible to try to find something that is not found", function(done) {
       assert(graph_under_test.query !== null);
       graph_under_test.findNode(session,"TestLabelThatisNotThere","UnknownTestName").then(result => {
         assert(result !== null);
@@ -98,7 +133,7 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to filter results too far", function(done) {
+    it.skip( "should be able to filter results too far", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
@@ -119,7 +154,7 @@ describe("tcg", function() {
       });
     });
 
-    it( "should work with a test that always succeed", function(done) {
+    it.skip( "should work with a test that always succeed", function(done) {
       assert(true);
       done();
     });

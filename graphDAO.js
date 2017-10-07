@@ -30,12 +30,43 @@ function addNode(session,label,name,properties) {
     var filteredResult = filterResult(result,0,0);
     // already added?
     if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name) {
-      return Promise.reject("error, node already exists");
+      return Promise.reject(new Error("node already exists"));
     }
     else {
       var props = JSON.stringify(properties);
       var queryString = "CREATE (n: " + label + " { name: '" + name + "', properties: '" + props + "'}) return n";
       return query(session,queryString);
+    }
+  }).catch(error => {
+    return Promise.reject(error);
+  });
+}
+
+function addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties) {
+  return findNode(session,label1,name1).then(result => {
+    var filteredResult = filterResult(result,0,0);
+    // node1 exists?
+    if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name1) {
+      return findNode(session,label2,name2).then(result => {
+        var filteredResult = filterResult(result,0,0);
+        // node2 exists?
+        if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name2) {
+          var props = JSON.stringify(properties);
+          //CREATE (n)-[:LOVES {since: $value}]->(m)
+          var queryString = 
+            "CREATE (n: " + label1 + " { name: '" + name1 + "'})" +
+            "-[ r: " + relationshipLabel + " { name: '" + relationshipName + "', properties: '" + props + "'}]->" +
+            "(m: " + label2 + " { name: '" + name2 + "'}) return n";
+          console.log("88888888888: " + queryString);
+          return query(session,queryString);
+        }
+        else {
+          return Promise.reject(new Error("node2 not found"))
+        }
+      });
+    }
+    else {
+      return Promise.reject(new Error("node1 not found"))
     }
   }).catch(error => {
     return Promise.reject(error);
@@ -74,5 +105,6 @@ module.exports = {
   removeNode: removeNode,
   openSession: openSession,
   closeSession: closeSession,
-  filterResult: filterResult
+  filterResult: filterResult,
+  addRelationship: addRelationship
 };
