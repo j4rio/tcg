@@ -95,28 +95,40 @@ describe("tcg", function() {
     it( "should be able to add a relationship between two given existing nodes", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
-      console.log("0000");
       graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
-        console.log("0001");
         assert(result !== null);
         graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
-          console.log("0002");
           assert(result != null);
           //addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties
           graph_under_test.addRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ props: "yee"}).then(result => {
-            console.log("0003");
             assert(result != null);
             graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
-              console.log("0004");
               assert(result !== null);
               graph_under_test.removeNode(session,"TestLabelz","testName2").then(result => {
-                console.log("0005");
                 console.log("result: " + JSON.stringify(result));
                 done();
               });
             })
           });
         });
+      }).catch(error => {
+        done(error);
+      });
+    });
+
+    it( "should be able to add a relationship between a same node (self directed relationship)", function(done) {
+      this.timeout(20000);
+      assert(graph_under_test.addNode !== null);
+      graph_under_test.addNode(session,"TestLabel","testName3",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        assert(result !== null);
+        //addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties
+        graph_under_test.addRelationship(session,"TestLabel","testName3","TestLabel","testName3","TestRelSelf","testRelNameSelf",{ props: "yeeyee"}).then(result => {
+          assert(result != null);
+          graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
+            assert(result !== null);
+            done();
+          })  ;
+        }); 
       }).catch(error => {
         done(error);
       });

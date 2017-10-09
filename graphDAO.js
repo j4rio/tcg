@@ -56,7 +56,6 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
             "MATCH (n: " + label1 + " { name: '" + name1 + "'})," +
                   "(m: " + label2 + " { name: '" + name2 + "'}) " +
             "MERGE (n)-[ r: " + relationshipLabel + " { name: '" + relationshipName + "', properties: '" + props + "'}]->(m) return n,r,m";
-          console.log("88888888888: " + queryString);
           return query(session,queryString);
         }
         else {
