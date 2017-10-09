@@ -52,11 +52,10 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
         // node2 exists?
         if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name2) {
           var props = JSON.stringify(properties);
-          //CREATE (n)-[:LOVES {since: $value}]->(m)
           var queryString = 
-            "CREATE (n: " + label1 + " { name: '" + name1 + "'})" +
-            "-[ r: " + relationshipLabel + " { name: '" + relationshipName + "', properties: '" + props + "'}]->" +
-            "(m: " + label2 + " { name: '" + name2 + "'}) return n";
+            "MATCH (n: " + label1 + " { name: '" + name1 + "'})," +
+                  "(m: " + label2 + " { name: '" + name2 + "'}) " +
+            "MERGE (n)-[ r: " + relationshipLabel + " { name: '" + relationshipName + "', properties: '" + props + "'}]->(m) return n,r,m";
           console.log("88888888888: " + queryString);
           return query(session,queryString);
         }
