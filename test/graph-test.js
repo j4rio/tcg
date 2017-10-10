@@ -30,7 +30,7 @@ describe("tcg", function() {
     done();
   });
 
-  context("graph.js", function() {
+  context("graphDAO.js", function() {
 
     // before each test
 
@@ -51,7 +51,6 @@ describe("tcg", function() {
       var now = new Date();
       graph_under_test.query(session,"MATCH (n) RETURN n LIMIT 2").then(result => {
         assert(result !== null);
-        console.log("result: " + JSON.stringify(result));
         done();
       });
     });
@@ -66,12 +65,12 @@ describe("tcg", function() {
           assert(filteredResult.properties.name == "testName");
           graph_under_test.removeNode(session,"TestLabel","testName").then(result => {
             assert(result !== null);
-            console.log("result: " + JSON.stringify(result));
             done();
           });
         })
       }).catch(error => {
-        console.log("Poks: " + error);
+        assert(false);
+        done();
       });
     });
 
@@ -83,12 +82,12 @@ describe("tcg", function() {
           assert(err !== null);
           graph_under_test.removeNode(session,"TestLabel","testName").then(result => {
             assert(result !== null);
-            console.log("result: " + JSON.stringify(result));
             done();
           });
         })
       }).catch(error => {
-        console.log("Poks: " + error);
+        assert(false);
+        done();
       });
     });
 
@@ -99,16 +98,39 @@ describe("tcg", function() {
         assert(result !== null);
         graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
           assert(result != null);
-          //addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties
           graph_under_test.addRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ props: "yee"}).then(result => {
             assert(result != null);
-            graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
+            graph_under_test.removeNode(session,"TestLabel","testName1").then(result => {
               assert(result !== null);
-              graph_under_test.removeNode(session,"TestLabelz","testName2").then(result => {
-                console.log("result: " + JSON.stringify(result));
+              graph_under_test.removeNode(session,"TestLabel","testName2").then(result => {
                 done();
               });
             })
+          });
+        });
+      }).catch(error => {
+        done(error);
+      });
+    });
+
+    it( "should be able to add more properties to an existing relationship", function(done) {
+      this.timeout(20000);
+      assert(graph_under_test.addNode !== null);
+      graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        assert(result !== null);
+        graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
+          assert(result != null);
+          graph_under_test.addRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ base_props: "yee"}).then(result => {
+            assert(result != null);
+            graph_under_test.updateRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ moreProps: "yeeyee", stuff: { more: "stuff"}}).then(result => {
+              assert(result != null);
+              graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
+                assert(result !== null);
+                graph_under_test.removeNode(session,"TestLabelz","testName2").then(result => {
+                  done();
+                });
+              });
+            });
           });
         });
       }).catch(error => {
@@ -121,10 +143,9 @@ describe("tcg", function() {
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName3",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
         assert(result !== null);
-        //addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties
         graph_under_test.addRelationship(session,"TestLabel","testName3","TestLabel","testName3","TestRelSelf","testRelNameSelf",{ props: "yeeyee"}).then(result => {
           assert(result != null);
-          graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
+          graph_under_test.removeNode(session,"TestLabel","testName3").then(result => {
             assert(result !== null);
             done();
           })  ;
@@ -134,11 +155,10 @@ describe("tcg", function() {
       });
     });
 
-    it.skip( "should be possible to try to find something that is not found", function(done) {
+    it.skip( "should be possible to try to find something that is not there", function(done) {
       assert(graph_under_test.query !== null);
       graph_under_test.findNode(session,"TestLabelThatisNotThere","UnknownTestName").then(result => {
         assert(result !== null);
-        console.log("result: " + JSON.stringify(result));
         var filteredResult = graph_under_test.filterResult(result,0,0);
         assert(filteredResult === null);
         done();
@@ -159,7 +179,6 @@ describe("tcg", function() {
           assert(filteredResult === null);
           graph_under_test.removeNode(session,"TestLabel","testName").then(result => {
             assert(result !== null);
-            console.log("result: " + JSON.stringify(result));
             done();
           });
         })

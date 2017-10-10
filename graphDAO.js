@@ -42,6 +42,8 @@ function addNode(session,label,name,properties) {
   });
 }
 
+// add a directed relationship between two named nodes and add properties to this relationship
+
 function addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties) {
   return findNode(session,label1,name1).then(result => {
     var filteredResult = filterResult(result,0,0);
@@ -51,11 +53,43 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
         var filteredResult = filterResult(result,0,0);
         // node2 exists?
         if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name2) {
-          var props = JSON.stringify(properties);
+          var props = properties;
           var queryString = 
             "MATCH (n: " + label1 + " { name: '" + name1 + "'})," +
                   "(m: " + label2 + " { name: '" + name2 + "'}) " +
             "MERGE (n)-[ r: " + relationshipLabel + " { name: '" + relationshipName + "', properties: '" + props + "'}]->(m) return n,r,m";
+          return query(session,queryString);
+        }
+        else {
+          return Promise.reject(new Error("node2 not found"))
+        }
+      });
+    }
+    else {
+      return Promise.reject(new Error("node1 not found"))
+    }
+  }).catch(error => {
+    return Promise.reject(error);
+  });
+}
+
+//update a directed relationship between two named nodes and add more properties to this relationship
+
+function updateRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,updated_properties) {
+  return findNode(session,label1,name1).then(result => {
+    var filteredResult = filterResult(result,0,0);
+    // node1 exists?
+    if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name1) {
+      return findNode(session,label2,name2).then(result => {
+        var filteredResult = filterResult(result,0,0);
+        // node2 exists?
+        if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name2) {
+          var props = updated_properties;
+          var queryString = 
+            "MATCH (n: " + label1 + " { name: '" + name1 + "'})-" +
+            "[ r: " + relationshipLabel + " { name: '" + relationshipName + "'}]->" +
+                  "(m: " + label2 + " { name: '" + name2 + "'}) " +
+            "SET r.properties += '" + props + "' return n,r,m";
           return query(session,queryString);
         }
         else {
@@ -104,5 +138,6 @@ module.exports = {
   openSession: openSession,
   closeSession: closeSession,
   filterResult: filterResult,
-  addRelationship: addRelationship
+  addRelationship: addRelationship,
+  updateRelationship: updateRelationship
 };
