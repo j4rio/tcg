@@ -9,22 +9,26 @@ const driver = neo4j.driver(
 );
 
 //open session
+
 function openSession() {
   const session = driver.session();
   return session;
 }
 
 //close session
+
 function closeSession(session) {
   session.close();
 }
 
 //query
+
 function query(session,query,queryParam) {
   return session.run(query,queryParam);
 }
 
 //add node
+
 function addNode(session,label,name,properties) {
   return findNode(session,label,name).then(result => {
     var filteredResult = filterResult(result,0,0);
@@ -53,7 +57,7 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
         var filteredResult = filterResult(result,0,0);
         // node2 exists?
         if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name2) {
-          var props = properties;
+          var props = JSON.stringify(properties);
           var queryString = 
             "MATCH (n: " + label1 + " { name: '" + name1 + "'})," +
                   "(m: " + label2 + " { name: '" + name2 + "'}) " +
@@ -73,9 +77,9 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
   });
 }
 
-//update a directed relationship between two named nodes and add more properties to this relationship
+//replace old properties with new properties for a directed relationship between two named nodes
 
-function updateRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,updated_properties) {
+function replaceRelationshipProperties(session,label1,name1,label2,name2,relationshipLabel,relationshipName,updated_properties) {
   return findNode(session,label1,name1).then(result => {
     var filteredResult = filterResult(result,0,0);
     // node1 exists?
@@ -84,12 +88,12 @@ function updateRelationship(session,label1,name1,label2,name2,relationshipLabel,
         var filteredResult = filterResult(result,0,0);
         // node2 exists?
         if(filteredResult != null && "properties" in filteredResult && "name" in filteredResult.properties && filteredResult.properties.name == name2) {
-          var props = updated_properties;
+          var props = JSON.stringify(updated_properties);
           var queryString = 
             "MATCH (n: " + label1 + " { name: '" + name1 + "'})-" +
             "[ r: " + relationshipLabel + " { name: '" + relationshipName + "'}]->" +
                   "(m: " + label2 + " { name: '" + name2 + "'}) " +
-            "SET r.properties += '" + props + "' return n,r,m";
+            "SET r.properties = '" + props + "' return n,r,m";
           return query(session,queryString);
         }
         else {
@@ -106,18 +110,21 @@ function updateRelationship(session,label1,name1,label2,name2,relationshipLabel,
 }
 
 //find node
+
 function findNode(session,label,name) {
   var queryString = "MATCH (n: " + label + ") WHERE n.name = '" + name + "' RETURN n";
   return query(session,queryString);
 }
 
 //remove node
+
 function removeNode(session,label,name) {
   var queryString = "MATCH (n: " + label + ") WHERE n.name = '" + name + "' DETACH DELETE n";
   return query(session,queryString);
 }
 
 //result
+
 function filterResult(result,pos,field) {
   var ret = null;
   if(result && "records" in result && pos in result.records) {
@@ -130,6 +137,7 @@ function filterResult(result,pos,field) {
 }
 
 // public functions
+
 module.exports = {
   query: query,
   addNode: addNode,
@@ -139,5 +147,5 @@ module.exports = {
   closeSession: closeSession,
   filterResult: filterResult,
   addRelationship: addRelationship,
-  updateRelationship: updateRelationship
+  replaceRelationshipProperties: replaceRelationshipProperties
 };

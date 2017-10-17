@@ -113,7 +113,7 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to add more properties to an existing relationship", function(done) {
+    it( "should be able to replace properties for an existing relationship", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
@@ -122,7 +122,7 @@ describe("tcg", function() {
           assert(result != null);
           graph_under_test.addRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ base_props: "yee"}).then(result => {
             assert(result != null);
-            graph_under_test.updateRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ moreProps: "yeeyee", stuff: { more: "stuff"}}).then(result => {
+            graph_under_test.replaceRelationshipProperties(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ moreProps: "yeeyee", stuff: { more: "replaced stuff"}}).then(result => {
               assert(result != null);
               graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
                 assert(result !== null);
@@ -145,7 +145,7 @@ describe("tcg", function() {
         assert(result !== null);
         graph_under_test.addRelationship(session,"TestLabel","testName3","TestLabel","testName3","TestRelSelf","testRelNameSelf",{ props: "yeeyee"}).then(result => {
           assert(result != null);
-          graph_under_test.removeNode(session,"TestLabel","testName3").then(result => {
+          graph_under_test.removeNode(session,"TestLabelz","testName3").then(result => {
             assert(result !== null);
             done();
           })  ;
