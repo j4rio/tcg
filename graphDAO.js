@@ -65,12 +65,12 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
           return query(session,queryString);
         }
         else {
-          return Promise.reject(new Error("node2 not found"))
+          return Promise.reject(new Error("node2 not found"));
         }
       });
     }
     else {
-      return Promise.reject(new Error("node1 not found"))
+      return Promise.reject(new Error("node1 not found"));
     }
   }).catch(error => {
     return Promise.reject(error);
@@ -97,12 +97,12 @@ function replaceRelationshipProperties(session,label1,name1,label2,name2,relatio
           return query(session,queryString);
         }
         else {
-          return Promise.reject(new Error("node2 not found"))
+          return Promise.reject(new Error("node2 not found"));
         }
       });
     }
     else {
-      return Promise.reject(new Error("node1 not found"))
+      return Promise.reject(new Error("node1 not found"));
     }
   }).catch(error => {
     return Promise.reject(error);

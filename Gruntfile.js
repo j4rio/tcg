@@ -105,7 +105,7 @@ module.exports = function(grunt) {
           quiet: false
         },
         src: [
-         "test/**/*.js"
+          "test/**/*.js"
         ]
       }
     },
@@ -134,8 +134,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-env");
 
   //tcg custom tasks
-  grunt.registerMultiTask('tcg', 'tcg test helper grunt task.', function() {
-    grunt.log.writeln("tcg: " + this.target + ': ' + this.data);
+  grunt.registerMultiTask("tcg", "tcg test helper grunt task.", function() {
+    grunt.log.writeln("tcg: " + this.target + ": " + this.data);
   });
 
   // Default task(s).

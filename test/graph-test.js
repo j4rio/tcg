@@ -48,7 +48,6 @@ describe("tcg", function() {
 
     it.skip( "should be possible to make a simple graph query", function(done) {
       assert(graph_under_test.query !== null);
-      var now = new Date();
       graph_under_test.query(session,"MATCH (n) RETURN n LIMIT 2").then(result => {
         assert(result !== null);
         done();
@@ -59,6 +58,7 @@ describe("tcg", function() {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        assert(result !== null);
         graph_under_test.findNode(session,"TestLabel","testName").then(result => {
           assert(result !== null);
           var filteredResult = graph_under_test.filterResult(result,0,0);
@@ -67,8 +67,9 @@ describe("tcg", function() {
             assert(result !== null);
             done();
           });
-        })
+        });
       }).catch(error => {
+        assert(error !== null);
         assert(false);
         done();
       });
@@ -78,14 +79,16 @@ describe("tcg", function() {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        assert(result !== null);
         graph_under_test.addNode(session,"TestLabel","testName").catch(err => {
           assert(err !== null);
           graph_under_test.removeNode(session,"TestLabel","testName").then(result => {
             assert(result !== null);
             done();
           });
-        })
+        });
       }).catch(error => {
+        assert(error !== null);
         assert(false);
         done();
       });
@@ -103,9 +106,10 @@ describe("tcg", function() {
             graph_under_test.removeNode(session,"TestLabel","testName1").then(result => {
               assert(result !== null);
               graph_under_test.removeNode(session,"TestLabel","testName2").then(result => {
+                assert(result !== null);
                 done();
               });
-            })
+            });
           });
         });
       }).catch(error => {
@@ -124,9 +128,10 @@ describe("tcg", function() {
             assert(result != null);
             graph_under_test.replaceRelationshipProperties(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ moreProps: "yeeyee", stuff: { more: "replaced stuff"}}).then(result => {
               assert(result != null);
-              graph_under_test.removeNode(session,"TestLabelz","testName1").then(result => {
+              graph_under_test.removeNode(session,"TestLabel","testName1").then(result => {
                 assert(result !== null);
-                graph_under_test.removeNode(session,"TestLabelz","testName2").then(result => {
+                graph_under_test.removeNode(session,"TestLabel","testName2").then(result => {
+                  assert(result !== null);
                   done();
                 });
               });
@@ -145,7 +150,7 @@ describe("tcg", function() {
         assert(result !== null);
         graph_under_test.addRelationship(session,"TestLabel","testName3","TestLabel","testName3","TestRelSelf","testRelNameSelf",{ props: "yeeyee"}).then(result => {
           assert(result != null);
-          graph_under_test.removeNode(session,"TestLabelz","testName3").then(result => {
+          graph_under_test.removeNode(session,"TestLabel","testName3").then(result => {
             assert(result !== null);
             done();
           })  ;
@@ -169,19 +174,20 @@ describe("tcg", function() {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
+        assert(result !== null);
         graph_under_test.findNode(session,"TestLabel","testName").then(result => {
           assert(result !== null);
           var filteredResult = graph_under_test.filterResult(result,100,0); // going too far...
           assert(filteredResult === null);
-          var filteredResult = graph_under_test.filterResult(result,0,100); // going too far...
+          filteredResult = graph_under_test.filterResult(result,0,100); // going too far...
           assert(filteredResult === null);
-          var filteredResult = graph_under_test.filterResult(result,100,100); // going too far...
+          filteredResult = graph_under_test.filterResult(result,100,100); // going too far...
           assert(filteredResult === null);
           graph_under_test.removeNode(session,"TestLabel","testName").then(result => {
             assert(result !== null);
             done();
           });
-        })
+        });
       });
     });
 
