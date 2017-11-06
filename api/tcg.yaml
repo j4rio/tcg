@@ -20,37 +20,22 @@ tags:
 schemes:
 - "http"
 paths:
-  /{domain}/{state}:
+  /:
     get:
       tags:
       - "tcg"
-      summary: "Get an array of SEFs for a state in a domain"
-      description: "Get an array of SEFs for a state in a domain"
-      operationId: "getSEFArray"
-      consumes:
-      - "application/json"
+      summary: "Get an array of domains"
+      description: "Get an array of domains"
+      operationId: "getDomainArray"
       produces:
       - "application/json"
-      parameters:
-      - name: "domain"
-        in: "path"
-        description: "context domain"
-        required: true
-        type: "string"
-      - name: "state"
-        in: "path"
-        description: "state"
-        required: true
-        type: "string"
       responses:
         200:
           description: "success"
           schema:
-            $ref: "#/definitions/SEFArray"
+            $ref: "#/definitions/DomainArray"
         404:
-          description: "unknown domain/state/sef"
-        405:
-          description: "Invalid input"
+          description: "no domains"
       x-swagger-router-controller: "tcg"
 securityDefinitions:
   api_key:
@@ -58,42 +43,19 @@ securityDefinitions:
     name: "api_key"
     in: "header"
 definitions:
-  Quaternion:
-    description: "sef orientation matrix"
-    type: "array"
-    default: 
-      [ 1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-      ]
-    items: 
-      type: "number"
-  SEF:
+  Domain:
     type: "object"
     properties:
-      initialState:
+      name:
         type: "string"
-        description: "initial state"
-      triggers:
-        type: array
-        items: 
-          type: "string"
+        description: "domain name"
       explain:
         type: "string"
-        description: "explenation about the code fragment"
-      fragment:
-        type: "string"
-        description: "code fragment"
-      quaternion:
-        $ref: "#/definitions/Quaternion"
-      nextState:
-        type: "string"
-        description: "the next state"
-  SEFArray:
+        description: "explenation about the domain"
+  DomainArray:
     type: "array"
     items:
-      $ref: "#/definitions/SEF"
+      $ref: "#/definitions/Domain"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

@@ -3,8 +3,8 @@
 var url = require("url");
 var api = require("../api.js");
 
-//get array of SEFs
+//get array of domains
 
-module.exports.getSEFArray = function getFragment (req, res, next) {
-  api.getSEFArray(req.swagger.params, res, next);
+module.exports.getDomainArray = function (req, res, next) {
+  api.getDomainArray(req.swagger.params, res, next);
 };
