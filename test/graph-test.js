@@ -46,7 +46,7 @@ describe("tcg", function() {
 
     // basic
 
-    it.skip( "should be possible to make a simple graph query", function(done) {
+    it( "should be possible to make a simple graph query", function(done) {
       assert(graph_under_test.query !== null);
       graph_under_test.query(session,"MATCH (n) RETURN n LIMIT 2").then(result => {
         assert(result !== null);
@@ -54,7 +54,7 @@ describe("tcg", function() {
       });
     });
 
-    it.skip( "should be able to add, find and delete a given named node", function(done) {
+    it( "should be able to add, find and delete a given named node", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
@@ -75,7 +75,7 @@ describe("tcg", function() {
       });
     });
 
-    it.skip( "should not be able to add a node twice", function(done) {
+    it( "should not be able to add a node twice", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
@@ -160,7 +160,7 @@ describe("tcg", function() {
       });
     });
 
-    it.skip( "should be possible to try to find something that is not there", function(done) {
+    it( "should be possible to try to find something that is not there", function(done) {
       assert(graph_under_test.query !== null);
       graph_under_test.findNode(session,"TestLabelThatisNotThere","UnknownTestName").then(result => {
         assert(result !== null);
@@ -170,7 +170,7 @@ describe("tcg", function() {
       });
     });
 
-    it.skip( "should be able to filter results too far", function(done) {
+    it( "should be able to filter results too far", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
@@ -191,7 +191,21 @@ describe("tcg", function() {
       });
     });
 
-    it.skip( "should work with a test that always succeed", function(done) {
+    it( "should be able to read graph from a JSON file", (done) => {
+      graph_under_test.serialize(session,"test/test1.json",true,(err) => {
+        assert(err == null,"what? err: " + err);
+        done();
+      });
+    });
+
+    it( "should be able to write graph to a JSON file", (done) => {
+      graph_under_test.serialize(session,"test/test2.json",false,(err) => {
+        assert(err == null,"what? err: "+ err);
+        done();
+      });
+    });
+
+    it( "should work with a test that always succeed", (done) => {
       assert(true);
       done();
     });

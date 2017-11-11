@@ -1,0 +1,14 @@
+{
+  "nodes": [
+   {"label": "label1", "name": "name1", "properties": { "more": "stuff1", "and": { "more": "deep1"}}},
+   {"label": "label2", "name": "name2", "properties": { "more": "stuff2", "and": { "more": "deep2"}}},
+   {"label": "label3", "name": "name3", "properties": { "more": "stuff3", "and": { "more": "deep3"}}},
+   {"label": "label4", "name": "name4", "properties": { "more": "stuff4", "and": { "more": "deep4"}}}
+  ],
+  "relationships": [
+  {"label1": "label1", "name1": "name1", "label2": "label2", "name2": "name2","relationshipLabel": "relLabel1", "properties": { "p": "rel1"}},
+  {"label1": "label2", "name1": "name2", "label2": "label3", "name2": "name3","relationshipLabe2": "relLabel2", "properties": { "p": "rel2"}},
+  {"label1": "label3", "name1": "name3", "label2": "label4", "name2": "name2","relationshipLabe3": "relLabel3", "properties": { "p": "rel3"}},
+  {"label1": "label4", "name1": "name4", "label2": "label1", "name2": "name2","relationshipLabe4": "relLabel4", "properties": { "p": "rel4"}}
+ ]
+}

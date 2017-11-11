@@ -136,6 +136,71 @@ function filterResult(result,pos,field) {
   return ret;
 }
 
+//load graph from an object
+
+function loadGraphFromObject(session,obj,callback) {
+  // { nodes: [], relations: [] }
+  console.log("obj: " + JSON.stringify(obj,null,"\t"));
+  callback("not yet implemented");
+}
+
+// make an object from the graph
+
+function makeObjectFromGraph(session,callback) {
+  //
+  // {
+  //   nodes:
+  //   [
+  //     {
+  //       label: "label",
+  //       name: "name",
+  //       properties: {...}
+  //     }
+  //   ],
+  //   relations: 
+  //   [
+  //     {
+  //       label1: "l1",
+  //       name1: "n1",
+  //       label2: "l2",
+  //       name2: "n2",
+  //       relationshipLabel: "rsl",
+  //       properties: {}
+  //     }
+  //   ]
+  // }
+  callback("not yet implemented");
+}
+
+//serialize the graph db to a file or load from a file
+
+function serialize(session,file,read,callback) {
+  var fs = require("fs");
+  if(read) { // serialize from a json file
+    var obj;
+    fs.readFile(file,"utf8", (err,data) => {
+      if(err) {
+        throw(err);
+      }
+      obj = JSON.parse(data);
+      loadGraphFromObject(session,obj,callback);
+    });
+  }
+  else { // serialize to a json file
+    var obj = makeObjectFromGraph(session, (err) => {
+      if(err !== null) {
+        fs.writeFile(file,"utf8",JSON.stringify(obj),(err) => {
+          callback(err);
+        });
+      }
+      else {
+        callback(err);
+      }
+    });
+    
+  }
+}
+
 // public functions
 
 module.exports = {
@@ -147,5 +212,6 @@ module.exports = {
   closeSession: closeSession,
   filterResult: filterResult,
   addRelationship: addRelationship,
-  replaceRelationshipProperties: replaceRelationshipProperties
+  replaceRelationshipProperties: replaceRelationshipProperties,
+  serialize: serialize
 };

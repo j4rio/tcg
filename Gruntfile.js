@@ -105,8 +105,8 @@ module.exports = function(grunt) {
           quiet: false
         },
         src: [
-          "test/app-test*.js"
-          //"test/**/*.js"
+          // "test/app-test*.js"
+          "test/**/*.js"
         ]
       }
     },
