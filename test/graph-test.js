@@ -192,6 +192,7 @@ describe("tcg", function() {
     });
 
     it( "should be able to read graph from a JSON file", (done) => {
+      this.timeout(30000);
       graph_under_test.serialize(session,"test/test1.json",true,(err) => {
         assert(err == null,"what? err: " + err);
         done();
@@ -199,6 +200,7 @@ describe("tcg", function() {
     });
 
     it( "should be able to write graph to a JSON file", (done) => {
+      this.timeout(60000);
       graph_under_test.serialize(session,"test/test2.json",false,(err) => {
         assert(err == null,"what? err: "+ err);
         done();

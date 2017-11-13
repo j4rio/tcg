@@ -136,12 +136,56 @@ function filterResult(result,pos,field) {
   return ret;
 }
 
+//load nodes
+
+function loadNodes(session,obj,position,callback) {
+  if(obj != null && obj.hasOwnProperty("nodes") && position in obj.nodes) {
+    var node = obj.nodes[position];
+    addNode(session,node.label,node.name,node.properties).then(() => {
+      loadNodes(session,obj,position+1,callback);
+    });
+  }
+  else {
+    callback(null);
+  }
+}
+
+//load nodes
+
+function loadRelationships(session,obj,position,callback) {
+  if(obj != null && obj.hasOwnProperty("relationships") && position in obj.relationships) {
+    var relationship = obj.relationships[position];
+    addRelationship(
+        session,
+        relationship.label1,relationship.name1,
+        relationship.label2,relationship.name2,
+        relationship.relationshipLabel,
+        relationship.relationshipName,
+        relationship.properties).then(() => {
+      loadRelationships(session,obj,position+1,callback);
+    }).fail((err) => {
+      callback(err);
+    });
+  }
+  else  {
+    callback(null);
+  }
+}
+
 //load graph from an object
 
 function loadGraphFromObject(session,obj,callback) {
   // { nodes: [], relations: [] }
-  console.log("obj: " + JSON.stringify(obj,null,"\t"));
-  callback("not yet implemented");
+  loadNodes(session,obj,0,err => {
+    if(err == null) {
+      loadRelationships(session,obj,0,err => {
+        callback(err);
+      });
+    }
+    else {
+      callback(err);
+    }
+  });
 }
 
 // make an object from the graph
