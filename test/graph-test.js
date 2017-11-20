@@ -19,7 +19,11 @@ describe("tcg", function() {
     assert(graph_under_test !== null);
     session = graph_under_test.openSession();
     assert(session !== null);
-    done();
+    graph_under_test.removeNodes(session,"UnitTest").then(() => {
+      done();
+    }).catch(err => {
+      done(err);
+    });
   });
 
   //after

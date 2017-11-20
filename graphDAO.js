@@ -116,10 +116,31 @@ function findNode(session,label,name) {
   return query(session,queryString);
 }
 
+//find all nodes
+
+function findAllNodes(session) {
+  var queryString = "MATCH (n) RETURN n";
+  return query(session,queryString);
+}
+
+//find all relationships
+
+function findAllRelationships(session) {
+  var queryString = "MATCH (n)-[r]->(m) RETURN n,r,m";
+  return query(session,queryString);
+}
+
 //remove node
 
 function removeNode(session,label,name) {
   var queryString = "MATCH (n: " + label + ") WHERE n.name = '" + name + "' DETACH DELETE n";
+  return query(session,queryString);
+}
+
+//remove all nodes with a label
+
+function removeNodes(session,label) {
+  var queryString = "MATCH (n: " + label + ") DETACH DELETE n";
   return query(session,queryString);
 }
 
@@ -143,6 +164,8 @@ function loadNodes(session,obj,position,callback) {
     var node = obj.nodes[position];
     addNode(session,node.label,node.name,node.properties).then(() => {
       loadNodes(session,obj,position+1,callback);
+    }).catch(err => {
+      callback(err);
     });
   }
   else {
@@ -163,7 +186,7 @@ function loadRelationships(session,obj,position,callback) {
         relationship.relationshipName,
         relationship.properties).then(() => {
       loadRelationships(session,obj,position+1,callback);
-    }).fail((err) => {
+    }).catch((err) => {
       callback(err);
     });
   }
@@ -191,29 +214,41 @@ function loadGraphFromObject(session,obj,callback) {
 // make an object from the graph
 
 function makeObjectFromGraph(session,callback) {
-  //
-  // {
-  //   nodes:
-  //   [
-  //     {
-  //       label: "label",
-  //       name: "name",
-  //       properties: {...}
-  //     }
-  //   ],
-  //   relations: 
-  //   [
-  //     {
-  //       label1: "l1",
-  //       name1: "n1",
-  //       label2: "l2",
-  //       name2: "n2",
-  //       relationshipLabel: "rsl",
-  //       properties: {}
-  //     }
-  //   ]
-  // }
-  callback("not yet implemented");
+  var obj = {
+    nodes: [],
+    relations: []
+  };
+  findAllNodes(session).then(result => {
+    console.log("22222222222: " + JSON.stringify(result,null,"\t"));
+    for(i in result.records) {
+      var r = result.records[i]._fields[0].properties;
+      obj.nodes[i] = {
+        label: r.labels[0],
+        name: r.name,
+        properties: r.properties
+      };
+    }
+    findAllRelationships(session).then(result => {
+      console.log("333333333333333: " + JSON.stringify(result,null,"\t"));
+      for(j in result.records) {
+        var r = result.records[i]._fields[0].properties;
+        obj.relations[j] = {
+          label1: r.label1,
+          name1: r.name1,
+          label2: r.label2,
+          name2: r.name2,
+          relationshipLabel: r.relationshipLabel,
+          properties: r.properties
+        };
+      }
+      console.log("999999999999999: " + JSON.stringify(obj,null,"\t"));
+      callback(null,obj);
+    }).catch(err => {
+      callback(err);
+    });
+  }).catch(err => {
+    callback(err);
+  });
 }
 
 //serialize the graph db to a file or load from a file
@@ -231,9 +266,9 @@ function serialize(session,file,read,callback) {
     });
   }
   else { // serialize to a json file
-    var obj = makeObjectFromGraph(session, (err) => {
-      if(err !== null) {
-        fs.writeFile(file,"utf8",JSON.stringify(obj),(err) => {
+    makeObjectFromGraph(session, (err,obj) => {
+      if(err == null) {
+        fs.writeFile(file,JSON.stringify(obj),"utf8",(err) => {
           callback(err);
         });
       }
@@ -252,6 +287,7 @@ module.exports = {
   addNode: addNode,
   findNode: findNode,
   removeNode: removeNode,
+  removeNodes: removeNodes,
   openSession: openSession,
   closeSession: closeSession,
   filterResult: filterResult,

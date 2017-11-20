@@ -1,14 +1,14 @@
 {
   "nodes": [
-   {"label": "label1", "name": "name1", "properties": { "more": "stuff1", "and": { "more": "deep1"}}},
-   {"label": "label2", "name": "name2", "properties": { "more": "stuff2", "and": { "more": "deep2"}}},
-   {"label": "label3", "name": "name3", "properties": { "more": "stuff3", "and": { "more": "deep3"}}},
-   {"label": "label4", "name": "name4", "properties": { "more": "stuff4", "and": { "more": "deep4"}}}
+   {"label": "UnitTest", "name": "name1", "properties": { "more": "stuff1", "and": { "more": "deep1"}}},
+   {"label": "UnitTest", "name": "name2", "properties": { "more": "stuff2", "and": { "more": "deep2"}}},
+   {"label": "UnitTest", "name": "name3", "properties": { "more": "stuff3", "and": { "more": "deep3"}}},
+   {"label": "UnitTest", "name": "name4", "properties": { "more": "stuff4", "and": { "more": "deep4"}}}
   ],
   "relationships": [
-  {"label1": "label1", "name1": "name1", "label2": "label2", "name2": "name2","relationshipLabel": "relLabel1", "relationshipName": "name1","properties": { "p": "rel1"}},
-  {"label1": "label2", "name1": "name2", "label2": "label3", "name2": "name3","relationshipLabel": "relLabel2", "relationshipName": "name2","properties": { "p": "rel2"}},
-  {"label1": "label3", "name1": "name3", "label2": "label4", "name2": "name4","relationshipLabel": "relLabel3", "relationshipName": "name3","properties": { "p": "rel3"}},
-  {"label1": "label4", "name1": "name4", "label2": "label1", "name2": "name1","relationshipLabel": "relLabel4", "relationshipName": "name4","properties": { "p": "rel4"}}
+  {"label1": "UnitTest", "name1": "name1", "label2": "UnitTest", "name2": "name2","relationshipLabel": "relLabel1", "relationshipName": "name1","properties": { "p": "rel1"}},
+  {"label1": "UnitTest", "name1": "name2", "label2": "UnitTest", "name2": "name3","relationshipLabel": "relLabel2", "relationshipName": "name2","properties": { "p": "rel2"}},
+  {"label1": "UnitTest", "name1": "name3", "label2": "UnitTest", "name2": "name4","relationshipLabel": "relLabel3", "relationshipName": "name3","properties": { "p": "rel3"}},
+  {"label1": "UnitTest", "name1": "name4", "label2": "UnitTest", "name2": "name1","relationshipLabel": "relLabel4", "relationshipName": "name4","properties": { "p": "rel4"}}
  ]
 }
