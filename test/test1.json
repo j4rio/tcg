@@ -5,7 +5,7 @@
    {"label": "UnitTest", "name": "name3", "properties": { "more": "stuff3", "and": { "more": "deep3"}}},
    {"label": "UnitTest", "name": "name4", "properties": { "more": "stuff4", "and": { "more": "deep4"}}}
   ],
-  "relationships": [
+  "relations": [
   {"label1": "UnitTest", "name1": "name1", "label2": "UnitTest", "name2": "name2","relationshipLabel": "relLabel1", "relationshipName": "name1","properties": { "p": "rel1"}},
   {"label1": "UnitTest", "name1": "name2", "label2": "UnitTest", "name2": "name3","relationshipLabel": "relLabel2", "relationshipName": "name2","properties": { "p": "rel2"}},
   {"label1": "UnitTest", "name1": "name3", "label2": "UnitTest", "name2": "name4","relationshipLabel": "relLabel3", "relationshipName": "name3","properties": { "p": "rel3"}},
