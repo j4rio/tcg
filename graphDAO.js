@@ -227,26 +227,31 @@ function makeObjectFromGraph(session,callback) {
       obj.nodes[i] = {
         label: r.labels[0],
         name: r.properties.name,
-        properties: r.properties.properties
+        properties: JSON.parse(r.properties.properties)
       };
     }
     findAllRelations(session).then(result => {
       for(var j in result.records) {
-        var r = filterResult(result,i,0);
+        var r1 = filterResult(result,j,0);
+        var r2 = filterResult(result,j,1);
+        var r3 = filterResult(result,j,2);
         obj.relations[j] = {
-          label1: r.label1,
-          name1: r.name1,
-          label2: r.label2,
-          name2: r.name2,
-          relationshipLabel: r.relationshipLabel,
-          properties: r.properties
+          label1: r1.labels[0],
+          name1: r1.properties.name,
+          label2: r3.labels[0],
+          name2: r3.properties.name,
+          relationshipLabel: r2.type,
+          relationshipName: r2.properties.name,
+          properties: JSON.parse(r2.properties.properties)
         };
       }
       callback(null,obj);
     }).catch(err => {
+      console.log("pokspoks1: "+err);
       callback(err);
     });
   }).catch(err => {
+    console.log("pokspoks2: "+err);
     callback(err);
   });
 }
@@ -262,7 +267,7 @@ function serialize(session,file,read,callback) {
   else { // serialize to a json file
     makeObjectFromGraph(session, (err,obj) => {
       if(err == null) {
-        fs.writeFileSync(file,JSON.stringify(obj));
+        fs.writeFileSync(file,JSON.stringify(obj),"utf8");
         callback(null);
       }
       else {
