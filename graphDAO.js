@@ -214,13 +214,11 @@ function loadGraphFromObject(session,obj,callback) {
 // make an object from the graph
 
 function makeObjectFromGraph(session,callback) {
-  console.log("0000");
   let obj = {
     nodes: [],
     relations: []
   };
   findAllNodes(session).then(result => {
-    console.log("0001");
     for(let i in result.records) {
       let r = filterResult(result,i,0);
       if(r == null) {
@@ -232,11 +230,8 @@ function makeObjectFromGraph(session,callback) {
         properties: JSON.parse(r.properties.properties)
       };
     }
-    console.log("0002");
     findAllRelations(session).then(result => {
-      console.log("0003");
       for(let j in result.records) {
-        console.log("0004/" + j);
         let r1 = filterResult(result,j,0);
         let r2 = filterResult(result,j,1);
         let r3 = filterResult(result,j,2);
@@ -250,14 +245,11 @@ function makeObjectFromGraph(session,callback) {
           properties: JSON.parse(r2.properties.properties)
         };
       }
-      console.log("0005");
       callback(null,obj);
     }).catch(err => {
-      console.log("pokspoks1: "+err);
       callback(err);
     });
   }).catch(err => {
-    console.log("pokspoks2: "+err);
     callback(err);
   });
 }
@@ -265,29 +257,22 @@ function makeObjectFromGraph(session,callback) {
 //serialize the graph db to a file or load from a file
 
 function serialize(session,file,read,callback) {
-  console.log("000");
   var fs = require("fs");
   if(read) { // serialize from a json file
-    console.log("001");
     var obj = JSON.parse(fs.readFileSync(file,"utf8"));
     loadGraphFromObject(session,obj,callback);
   }
   else { // serialize to a json file
-    console.log("002");
     makeObjectFromGraph(session, (err,obj) => {
       if(err == null) {
-        console.log("003");
         fs.writeFileSync(file,JSON.stringify(obj),"utf8");
-        console.log("004");
         callback(null);
       }
       else {
-        console.log("005");
         callback(err);
       }
     });
   }
-  console.log("006");
 }
 
 // public functions

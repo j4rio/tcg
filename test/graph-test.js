@@ -197,16 +197,13 @@ describe("tcg", function() {
 
     it( "should be able to read a graph from a JSON file", function (done) {
       this.timeout(30000);
-      console.log("AAA");
       graph_under_test.serialize(session,"test/test1.json",true,(err) => {
-        console.log("BBB");
         assert(err == null,"what? err: " + err);
         var fs = require("fs");
         assert(fs != null);
         var objFile = JSON.parse(fs.readFileSync("test/test1.json", "utf8"));
         assert(objFile != null);
         graph_under_test.makeObjectFromGraph(session,(err,objGraph) => {
-          console.log("CCC");
           assert(err == null);
           assert(objGraph != null);
           try {
