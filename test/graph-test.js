@@ -98,14 +98,14 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to add a relationship between two given existing nodes", function(done) {
+    it( "should be able to add a relation between two given existing nodes", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
         assert(result !== null);
         graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
           assert(result != null);
-          graph_under_test.addRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ props: "yee"}).then(result => {
+          graph_under_test.addRelation(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ props: "yee"}).then(result => {
             assert(result != null);
             graph_under_test.removeNode(session,"TestLabel","testName1").then(result => {
               assert(result !== null);
@@ -121,16 +121,16 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to replace properties for an existing relationship", function(done) {
+    it( "should be able to replace properties for an existing relation", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName1",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
         assert(result !== null);
         graph_under_test.addNode(session,"TestLabel","testName2",{prop1: "pp1", prop2: "pp2"}).then(result => {
           assert(result != null);
-          graph_under_test.addRelationship(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ base_props: "yee"}).then(result => {
+          graph_under_test.addRelation(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ base_props: "yee"}).then(result => {
             assert(result != null);
-            graph_under_test.replaceRelationshipProperties(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ moreProps: "yeeyee", stuff: { more: "replaced stuff"}}).then(result => {
+            graph_under_test.replaceRelationProperties(session,"TestLabel","testName1","TestLabel","testName2","TestRel","testRelName",{ moreProps: "yeeyee", stuff: { more: "replaced stuff"}}).then(result => {
               assert(result != null);
               graph_under_test.removeNode(session,"TestLabel","testName1").then(result => {
                 assert(result !== null);
@@ -147,12 +147,12 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to add a relationship between a same node (self directed relationship)", function(done) {
+    it( "should be able to add a relation between a same node (self directed relation)", function(done) {
       this.timeout(20000);
       assert(graph_under_test.addNode !== null);
       graph_under_test.addNode(session,"TestLabel","testName3",{ prop1: "p1", prop2: "p2", sub: { sub: "sub"}}).then(result => {
         assert(result !== null);
-        graph_under_test.addRelationship(session,"TestLabel","testName3","TestLabel","testName3","TestRelSelf","testRelNameSelf",{ props: "yeeyee"}).then(result => {
+        graph_under_test.addRelation(session,"TestLabel","testName3","TestLabel","testName3","TestRelSelf","testRelNameSelf",{ props: "yeeyee"}).then(result => {
           assert(result != null);
           graph_under_test.removeNode(session,"TestLabel","testName3").then(result => {
             assert(result !== null);
@@ -195,7 +195,7 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to read a graph from a JSON file", (done) => {
+    it( "should be able to read a graph from a JSON file", function (done) {
       this.timeout(30000);
       console.log("AAA");
       graph_under_test.serialize(session,"test/test1.json",true,(err) => {
@@ -210,7 +210,7 @@ describe("tcg", function() {
           assert(err == null);
           assert(objGraph != null);
           try {
-            //assert.deepEqual(objFile,objGraph);
+            assert.deepEqual(objFile,objGraph);
             done();
           }
           catch(error) {
@@ -220,7 +220,7 @@ describe("tcg", function() {
       });
     });
 
-    it( "should be able to write graph to a JSON file", (done) => {
+    it( "should be able to write graph to a JSON file", function(done) {
       this.timeout(60000);
       graph_under_test.serialize(session,"test/test2.json",false,(err) => {
         assert(err == null,"what? err: "+ err);

@@ -46,9 +46,9 @@ function addNode(session,label,name,properties) {
   });
 }
 
-// add a directed relationship between two named nodes and add properties to this relationship
+// add a directed relation between two named nodes and add properties to this relation
 
-function addRelationship(session,label1,name1,label2,name2,relationshipLabel,relationshipName,properties) {
+function addRelation(session,label1,name1,label2,name2,relationLabel,relationName,properties) {
   return findNode(session,label1,name1).then(result => {
     var filteredResult = filterResult(result,0,0);
     // node1 exists?
@@ -61,7 +61,7 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
           var queryString = 
             "MATCH (n: " + label1 + " { name: '" + name1 + "'})," +
                   "(m: " + label2 + " { name: '" + name2 + "'}) " +
-            "MERGE (n)-[ r: " + relationshipLabel + " { name: '" + relationshipName + "', properties: '" + props + "'}]->(m) return n,r,m";
+            "MERGE (n)-[ r: " + relationLabel + " { name: '" + relationName + "', properties: '" + props + "'}]->(m) return n,r,m";
           return query(session,queryString);
         }
         else {
@@ -77,9 +77,9 @@ function addRelationship(session,label1,name1,label2,name2,relationshipLabel,rel
   });
 }
 
-//replace old properties with new properties for a directed relationship between two named nodes
+//replace old properties with new properties for a directed relation between two named nodes
 
-function replaceRelationshipProperties(session,label1,name1,label2,name2,relationshipLabel,relationshipName,updated_properties) {
+function replaceRelationProperties(session,label1,name1,label2,name2,relationLabel,relationName,updated_properties) {
   return findNode(session,label1,name1).then(result => {
     var filteredResult = filterResult(result,0,0);
     // node1 exists?
@@ -91,7 +91,7 @@ function replaceRelationshipProperties(session,label1,name1,label2,name2,relatio
           var props = JSON.stringify(updated_properties);
           var queryString = 
             "MATCH (n: " + label1 + " { name: '" + name1 + "'})-" +
-            "[ r: " + relationshipLabel + " { name: '" + relationshipName + "'}]->" +
+            "[ r: " + relationLabel + " { name: '" + relationName + "'}]->" +
                   "(m: " + label2 + " { name: '" + name2 + "'}) " +
             "SET r.properties = '" + props + "' return n,r,m";
           return query(session,queryString);
@@ -123,7 +123,7 @@ function findAllNodes(session) {
   return query(session,queryString);
 }
 
-//find all relationships
+//find all relations
 
 function findAllRelations(session) {
   var queryString = "MATCH (n)-[r]->(m) RETURN n,r,m";
@@ -175,17 +175,17 @@ function loadNodes(session,obj,position,callback) {
 
 //load nodes
 
-function loadRelationships(session,obj,position,callback) {
+function loadRelation(session,obj,position,callback) {
   if(obj != null && obj.hasOwnProperty("relations") && position in obj.relations) {
-    var relationship = obj.relations[position];
-    addRelationship(
+    var relation = obj.relations[position];
+    addRelation(
       session,
-      relationship.label1,relationship.name1,
-      relationship.label2,relationship.name2,
-      relationship.relationshipLabel,
-      relationship.relationshipName,
-      relationship.properties).then(() => {
-      loadRelationships(session,obj,position+1,callback);
+      relation.label1,relation.name1,
+      relation.label2,relation.name2,
+      relation.relationLabel,
+      relation.relationName,
+      relation.properties).then(() => {
+      loadRelation(session,obj,position+1,callback);
     }).catch((err) => {
       callback(err);
     });
@@ -201,7 +201,7 @@ function loadGraphFromObject(session,obj,callback) {
   // { nodes: [], relations: [] }
   loadNodes(session,obj,0,err => {
     if(err == null) {
-      loadRelationships(session,obj,0,err => {
+      loadRelation(session,obj,0,err => {
         callback(err);
       });
     }
@@ -214,13 +214,15 @@ function loadGraphFromObject(session,obj,callback) {
 // make an object from the graph
 
 function makeObjectFromGraph(session,callback) {
-  var obj = {
+  console.log("0000");
+  let obj = {
     nodes: [],
     relations: []
   };
   findAllNodes(session).then(result => {
-    for(var i in result.records) {
-      var r = filterResult(result,i,0);
+    console.log("0001");
+    for(let i in result.records) {
+      let r = filterResult(result,i,0);
       if(r == null) {
         break;
       }
@@ -230,21 +232,25 @@ function makeObjectFromGraph(session,callback) {
         properties: JSON.parse(r.properties.properties)
       };
     }
+    console.log("0002");
     findAllRelations(session).then(result => {
-      for(var j in result.records) {
-        var r1 = filterResult(result,j,0);
-        var r2 = filterResult(result,j,1);
-        var r3 = filterResult(result,j,2);
+      console.log("0003");
+      for(let j in result.records) {
+        console.log("0004/" + j);
+        let r1 = filterResult(result,j,0);
+        let r2 = filterResult(result,j,1);
+        let r3 = filterResult(result,j,2);
         obj.relations[j] = {
           label1: r1.labels[0],
           name1: r1.properties.name,
           label2: r3.labels[0],
           name2: r3.properties.name,
-          relationshipLabel: r2.type,
-          relationshipName: r2.properties.name,
+          relationLabel: r2.type,
+          relationName: r2.properties.name,
           properties: JSON.parse(r2.properties.properties)
         };
       }
+      console.log("0005");
       callback(null,obj);
     }).catch(err => {
       console.log("pokspoks1: "+err);
@@ -259,22 +265,29 @@ function makeObjectFromGraph(session,callback) {
 //serialize the graph db to a file or load from a file
 
 function serialize(session,file,read,callback) {
+  console.log("000");
   var fs = require("fs");
   if(read) { // serialize from a json file
+    console.log("001");
     var obj = JSON.parse(fs.readFileSync(file,"utf8"));
     loadGraphFromObject(session,obj,callback);
   }
   else { // serialize to a json file
+    console.log("002");
     makeObjectFromGraph(session, (err,obj) => {
       if(err == null) {
+        console.log("003");
         fs.writeFileSync(file,JSON.stringify(obj),"utf8");
+        console.log("004");
         callback(null);
       }
       else {
+        console.log("005");
         callback(err);
       }
     });
   }
+  console.log("006");
 }
 
 // public functions
@@ -288,8 +301,8 @@ module.exports = {
   openSession: openSession,
   closeSession: closeSession,
   filterResult: filterResult,
-  addRelationship: addRelationship,
-  replaceRelationshipProperties: replaceRelationshipProperties,
+  addRelation: addRelation,
+  replaceRelationProperties: replaceRelationProperties,
   serialize: serialize,
   makeObjectFromGraph: makeObjectFromGraph
 };
