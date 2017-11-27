@@ -9,6 +9,7 @@
   {"label1": "UnitTest", "name1": "name1", "label2": "UnitTest", "name2": "name2","relationLabel": "relLabel1", "relationName": "name1","properties": { "p": "rel1"}},
   {"label1": "UnitTest", "name1": "name2", "label2": "UnitTest", "name2": "name3","relationLabel": "relLabel2", "relationName": "name2","properties": { "p": "rel2"}},
   {"label1": "UnitTest", "name1": "name3", "label2": "UnitTest", "name2": "name4","relationLabel": "relLabel3", "relationName": "name3","properties": { "p": "rel3"}},
-  {"label1": "UnitTest", "name1": "name4", "label2": "UnitTest", "name2": "name1","relationLabel": "relLabel4", "relationName": "name4","properties": { "p": "rel4"}}
+  {"label1": "UnitTest", "name1": "name4", "label2": "UnitTest", "name2": "name1","relationLabel": "relLabel4", "relationName": "name4","properties": { "p": "rel4"}},
+  {"label1": "UnitTest", "name1": "name4", "label2": "UnitTest", "name2": "name4","relationLabel": "relLabel5", "relationName": "name5","properties": { "p": "rel5"}}
  ]
 }
