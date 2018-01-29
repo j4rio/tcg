@@ -38,7 +38,7 @@ function initialize() {
     });
 
     //the server
-    var port = process.env.PORT || 8080;
+    var port = process.env.TCG_PORT || 8080;
     if(port != 0) {
       app.listen(port, function() {
         console.log("server listening on port: " + port);

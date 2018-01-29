@@ -9,6 +9,7 @@ var chai = require("chai");
 var assert = chai.assert;
 
 describe("tcg", function() {
+  this.timeout(120000);
   var graph_under_test;
   var session;
 
